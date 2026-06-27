@@ -15,7 +15,7 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
-    --foreground: #ededed;
+    --foreground: #ffffff;
   }
 }
 
@@ -25,4 +25,18 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+@keyframes label-fadein {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
 
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.nav-label-animate {
+  animation: label-fadein 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+}

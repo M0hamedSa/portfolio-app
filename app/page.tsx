@@ -11,10 +11,12 @@ import MenuButton from "@/app/components/MenuButton";
 import ContactForm from "@/app/components/ContactForm";
 import CopyEmail from "@/app/components/CopyEmail";
 import ProjectCard from "@/app/components/ProjectCard";
+import InvertedFluidCanvas from "@/app/components/InvertedFluidCanvas";
 import { PROJECTS } from "@/app/data/projects";
 export default function Home() {
   const marqueeRef = useRef<HTMLDivElement>(null);
   const homeSectionRef = useRef<HTMLElement>(null);
+  const aboutSectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const el = marqueeRef.current;
@@ -86,7 +88,7 @@ export default function Home() {
     <>
       <MenuButton />
       <div className="bg-[#ffffff] flex flex-col">
-        <section ref={homeSectionRef} id="home" className="relative overflow-hidden min-h-screen flex flex-col">
+        <section ref={homeSectionRef} id="home" className="relative overflow-hidden min-h-screen flex flex-col select-none cursor-default">
           <FluidCanvas containerRef={homeSectionRef} />
           <nav className="px-8 py-6 text-[#0a0a0a] font-(family-name:--font-exo2) flex justify-end text-xl">
             <LiveClock />
@@ -126,8 +128,9 @@ export default function Home() {
             </div>
           </div>
         </section>
-        <section id="about" className="min-h-screen bg-black flex items-center justify-center px-6 sm:px-8 py-20">
-          <div className="max-w-3xl text-white font-(family-name:--font-exo2)">
+        <section ref={aboutSectionRef} id="about" className="relative min-h-screen bg-black flex items-center justify-center px-6 sm:px-8 py-20 select-none cursor-default">
+          <InvertedFluidCanvas containerRef={aboutSectionRef} />
+          <div className="relative max-w-3xl text-white font-(family-name:--font-exo2)">
             <h2 className="text-4xl sm:text-5xl font-bold mb-6">About</h2>
             <p className="text-lg sm:text-xl leading-relaxed opacity-90">
               Full-stack developer with a passion for building clean, performant web experiences.

@@ -162,8 +162,7 @@ export class FluidSimulation {
   private rafId = 0;
   private container: HTMLElement;
 
-  private _onMouseMove: (e: MouseEvent) => void;
-  private _onTouchMove: (e: TouchEvent) => void;
+  private _onPointerMove: (e: PointerEvent) => void;
   private _onResize: () => void;
 
   constructor(
@@ -174,18 +173,13 @@ export class FluidSimulation {
     this.config = { ...DEFAULT_CONFIG, ...config };
     this.container = container;
 
-    this._onMouseMove = (e: MouseEvent) => {
+    this._onPointerMove = (e: PointerEvent) => {
       const rect = this.container.getBoundingClientRect();
-      this._onMove(e.clientX - rect.left, e.clientY - rect.top);
-    };
-
-    this._onTouchMove = (e: TouchEvent) => {
-      e.preventDefault();
-      const rect = this.container.getBoundingClientRect();
-      this._onMove(
-        e.touches[0].clientX - rect.left,
-        e.touches[0].clientY - rect.top
-      );
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      if (x >= 0 && x <= rect.width && y >= 0 && y <= rect.height) {
+        this._onMove(x, y);
+      }
     };
 
     this._onResize = () => {
@@ -317,10 +311,7 @@ export class FluidSimulation {
   }
 
   private _setupInput() {
-    this.container.addEventListener("mousemove", this._onMouseMove);
-    this.container.addEventListener("touchmove", this._onTouchMove, {
-      passive: false,
-    });
+    document.addEventListener("pointermove", this._onPointerMove, { capture: true });
   }
 
   private _onMove(x: number, y: number) {
@@ -496,8 +487,7 @@ export class FluidSimulation {
   /** Clean up all GPU resources and event listeners */
   destroy() {
     cancelAnimationFrame(this.rafId);
-    this.container.removeEventListener("mousemove", this._onMouseMove);
-    this.container.removeEventListener("touchmove", this._onTouchMove);
+    document.removeEventListener("pointermove", this._onPointerMove, { capture: true });
     window.removeEventListener("resize", this._onResize);
 
     this.velocity.read.dispose();

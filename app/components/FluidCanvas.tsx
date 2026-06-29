@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { FluidSimulation } from "@/app/lib/FluidSimulation";
+import { detectPerformanceTier } from "@/app/lib/detectPerformance";
 
 interface FluidCanvasProps {
   /** The container element the canvas should size itself to and listen for mouse events on */
@@ -12,6 +13,7 @@ interface FluidCanvasProps {
  * Renders a WebGL fluid simulation canvas positioned absolutely inside the
  * given container. Uses mix-blend-mode: difference so the fluid trail inverts
  * the colors beneath it (dark text → white, light background → dark).
+ * Automatically adjusts quality based on device capability.
  */
 export default function FluidCanvas({ containerRef }: FluidCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -21,7 +23,14 @@ export default function FluidCanvas({ containerRef }: FluidCanvasProps) {
     const container = containerRef.current;
     if (!canvas || !container) return;
 
-    const sim = new FluidSimulation(canvas, container);
+    const tier = detectPerformanceTier();
+    const sim = new FluidSimulation(canvas, container, {
+      pressureIterations: tier.pressureIterations,
+      dyeResolution: tier.dyeResolution,
+      curl: tier.curl,
+      simResolution: tier.simResolution,
+      pixelRatio: tier.pixelRatio,
+    });
 
     return () => {
       sim.destroy();

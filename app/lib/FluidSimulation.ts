@@ -113,6 +113,7 @@ export interface FluidConfig {
   threshold: number;
   edgeSoftness: number;
   inkColor: THREE.Color;
+  pixelRatio: number;
 }
 
 export const DEFAULT_CONFIG: FluidConfig = {
@@ -128,6 +129,7 @@ export const DEFAULT_CONFIG: FluidConfig = {
   threshold: 1.0,
   edgeSoftness: 0.0,
   inkColor: new THREE.Color(1, 1, 1),
+  pixelRatio: 2,
 };
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -205,7 +207,7 @@ export class FluidSimulation {
       premultipliedAlpha: false,
     });
     this.renderer.setClearColor(0x000000, 0);
-    this.renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    this.renderer.setPixelRatio(Math.min(devicePixelRatio, this.config.pixelRatio));
 
     const w = this.container.clientWidth;
     const h = this.container.clientHeight;
